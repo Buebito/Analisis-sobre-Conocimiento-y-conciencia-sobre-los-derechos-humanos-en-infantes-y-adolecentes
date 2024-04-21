@@ -13,6 +13,8 @@ async function cargarDatos() {
         color: 'gray' // Color por defecto, se asignará según el botón pulsado
     }));
 
+    console.log(datosProcesados);
+
     // Visualizar todos los datos al inicio
     actualizarVisualizacion('menores10');
 }
@@ -31,6 +33,22 @@ function csvToArray(str, delimiter = ",") {
     return arr.filter(row => row[headers[0]]); // Filtrar filas vacías
 }
 
+function seleccionarAleatoriamente(arr, num = 15) {
+    let indices = arr.map((_, i) => i);
+    let seleccionados = [];
+
+    for (let i = 0; i < num; i++) {
+        if (indices.length === 0) {
+            throw new RangeError("seleccionarAleatoriamente: menos elementos disponibles que los solicitados");
+        }
+        let randomIndex = Math.floor(Math.random() * indices.length);
+        seleccionados.push(arr[indices[randomIndex]]);
+        indices.splice(randomIndex, 1); // Elimina el índice usado
+    }
+
+    return seleccionados;
+}
+
 function actualizarVisualizacion(rangoEdad) {
     // Filtra los datos según el rango de edad seleccionado
     let datosFiltrados;
@@ -46,21 +64,28 @@ function actualizarVisualizacion(rangoEdad) {
 
     // Configuración inicial
     const width = window.innerWidth;
-    const height = window.innerHeight;
+    const height = 800;
 
+    let datosAleatorios = seleccionarAleatoriamente(datosFiltrados);
+    console.log(datosAleatorios);
+    // Aumentar el radio mínimo si es necesario para acomodar el texto
+    datosAleatorios.forEach(d => d.radius = Math.max(40, d.radius));
 
-    // Seleccione el SVG existente o cree uno nuevo si es necesario
     let svg = d3.select('#viz').select('svg');
     if (svg.empty()) {
         svg = d3.select('#viz').append('svg')
             .attr('width', width)
-            .attr('height', height)
-            .style('border', '1px solid black'); // Solo para visualizar el borde del SVG
+            .attr('height', height);
     }
 
-    // Crear la simulación de fuerzas para las burbujas
-    // Restablecer la simulación con los nuevos datos filtrados
-    const simulation = d3.forceSimulation(datosFiltrados)
+    // Asegúrate de detener cualquier simulación existente
+    if (svg.node().__simulation) {
+        svg.node().__simulation.stop();
+    }
+
+
+    // Crear la simulación de fuerzas para las burbujas con datosAleatorios
+    const simulation = d3.forceSimulation(datosAleatorios)
         .force('charge', d3.forceManyBody().strength(5))
         .force('center', d3.forceCenter(width / 2, height / 2))
         .force('collision', d3.forceCollide().radius(d => d.radius));
@@ -70,22 +95,24 @@ function actualizarVisualizacion(rangoEdad) {
         return `hsl(${Math.random() * 360}, 100%, 50%)`;
     }
 
-    // Enlazar los datos filtrados con la selección de burbujas
-    const bubbles = svg.selectAll('.bubble').data(datosFiltrados, d => d.respuesta);
+    // Eliminar las burbujas existentes antes de crear nuevas
+    svg.selectAll('.bubble').remove();
+    
 
-    // Eliminar las burbujas que ya no están en los datos filtrados
-    bubbles.exit().remove();
-
-    // Crear nuevas burbujas y fusionar con las existentes
-    bubbles.enter().append('circle')
+    // Crear nuevas burbujas basadas en datosAleatorios
+    const burbujas = svg.selectAll('.bubble')
+        .data(datosAleatorios, d => d.respuesta)
+        .enter().append('circle')
         .attr('class', 'bubble')
-        .merge(bubbles)
         .attr('r', d => d.radius)
-        .attr('fill', colorAleatorio) // Asignar un color aleatorio a cada burbuja
+        .attr('fill', colorAleatorio)
         .call(d3.drag()
             .on('start', dragstarted)
             .on('drag', dragged)
             .on('end', dragended));
+
+    // Guardar la referencia a la simulación en el nodo SVG
+    svg.node().__simulation = simulation;
 
     // Funciones para manejar los eventos de arrastre
     function dragstarted(event, d) {
@@ -106,11 +133,15 @@ function actualizarVisualizacion(rangoEdad) {
     }
     simulation.nodes(datosFiltrados).on('tick', ticked);
 
+    // Define la función ticked para actualizar las posiciones de las burbujas
     function ticked() {
         svg.selectAll('.bubble')
             .attr('cx', d => d.x)
             .attr('cy', d => d.y);
     }
+
+    // Inicia la simulación con ticked
+    simulation.on('tick', ticked);
 }
 
 cargarDatos();
