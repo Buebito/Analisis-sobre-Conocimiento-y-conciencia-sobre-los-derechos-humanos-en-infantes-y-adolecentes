@@ -14,7 +14,7 @@ async function cargarDatos() {
     }));
 
     // Visualizar todos los datos al inicio
-    actualizarVisualizacion('todos');
+    actualizarVisualizacion('menores10');
 }
 
 // Función para convertir CSV a array de objetos
