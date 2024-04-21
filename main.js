@@ -1,3 +1,6 @@
+const MAX_WIDTH = 300; // Máximo ancho del texto antes de hacer un salto de línea
+const LINE_HEIGHT = 20; // Altura de línea para el texto dentro de la burbuja
+const MIN_RADIUS = 150; // Radio mínimo de la burbuja
 // Variables globales para almacenar los datos procesados y poder reutilizarlos
 let datosProcesados;
 async function cargarDatos() {
@@ -83,10 +86,35 @@ function actualizarVisualizacion(rangoEdad) {
 
     // Calcula el radio de las burbujas basado en el texto
     const context = document.createElement('canvas').getContext('2d');
-    context.font = '16px sans-serif'; // Asegúrate de usar el mismo estilo de fuente que se usará en el SVG
+    // Dentro de la función donde calculas el radio y las líneas
+    context.font = '16px sans-serif'; // Establece el mismo estilo de fuente que usarás en SVG
     datosAleatorios.forEach(d => {
-        const width = context.measureText(d.respuesta).width;
-        d.radius = Math.max(100, Math.sqrt(width * width) * 0.5); // Ajusta el factor para el tamaño de la burbuja
+        let words = d.respuesta.split(' ');
+        let lines = [];
+        let line = '';
+        let widthOfLongestLine = 0;
+
+        words.forEach(word => {
+            let testLine = line + word + ' ';
+            let metrics = context.measureText(testLine);
+            let testWidth = metrics.width;
+            if (testWidth > MAX_WIDTH && line.length > 0) {
+                lines.push(line);
+                widthOfLongestLine = Math.max(widthOfLongestLine, testWidth);
+                line = word + ' ';
+            } else {
+                line = testLine;
+            }
+        });
+
+        if (line.length > 0) {
+            lines.push(line);
+            widthOfLongestLine = Math.max(widthOfLongestLine, context.measureText(line).width);
+        }
+
+        let newRadius = Math.sqrt((widthOfLongestLine / Math.PI) * (LINE_HEIGHT * lines.length));
+        d.radius = Math.max(MIN_RADIUS, newRadius);
+        d.lines = lines;
     });
 
     let svg = d3.select('#viz').select('svg');
@@ -167,10 +195,24 @@ function actualizarVisualizacion(rangoEdad) {
         svg.selectAll('.bubble')
             .attr('cx', d => d.x)
             .attr('cy', d => d.y);
-
-        svg.selectAll('.texto')
-            .attr('x', d => d.x)
-            .attr('y', d => d.y);
+    
+        svg.selectAll('.texto').remove(); // Mueve esto al principio de la función ticked
+    
+        // Dibuja cada línea de texto
+        datosAleatorios.forEach(d => {
+            let y = d.y - (d.lines.length - 1) * LINE_HEIGHT / 2;
+            d.lines.forEach((line, index) => {
+                svg.append('text')
+                    .attr('class', 'texto')
+                    .attr('x', d.x)
+                    .attr('y', y + (index * LINE_HEIGHT))
+                    .text(line)
+                    .attr('fill', 'black')
+                    .style('text-anchor', 'middle')
+                    .style('alignment-baseline', 'middle')
+                    .style('font-size', '16px');
+            });
+        });
     }
 
     // Inicia la simulación con ticked
