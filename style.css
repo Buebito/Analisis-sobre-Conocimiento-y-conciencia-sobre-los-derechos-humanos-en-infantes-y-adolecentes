@@ -1,0 +1,32 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-image: url('kids.webp');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    overflow: hidden; /* Evita el desplazamiento si el SVG es más grande que la pantalla */
+}
+
+.toolbar {
+    position: fixed; /* Hace que la barra de herramientas sea fija en la parte superior */
+    top: 0;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.8); /* Fondo semi-transparente para los botones */
+    z-index: 10; /* Asegura que la barra de herramientas está por encima del SVG */
+    display: flex;
+    justify-content: center; /* Centra los botones horizontalmente */
+    padding: 10px 0; /* Agrega algo de relleno en la parte superior e inferior */
+}
+
+#viz {
+    width: 100%;
+    height: 100vh; /* Utiliza la altura de la ventana del navegador */
+    position: relative; /* Posición relativa para que se ajuste dentro del cuerpo */
+    top: 0;
+    left: 0;
+}
+
+button {
+    margin: 0 10px; /* Espacio entre botones */
+}
