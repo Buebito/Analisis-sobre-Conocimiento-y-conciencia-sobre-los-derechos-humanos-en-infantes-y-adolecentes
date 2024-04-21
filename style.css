@@ -5,28 +5,44 @@ body {
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
-    overflow: hidden; /* Evita el desplazamiento si el SVG es más grande que la pantalla */
+    /* Elimina el overflow: hidden; para permitir desplazamiento */
 }
 
 .toolbar {
-    position: fixed; /* Hace que la barra de herramientas sea fija en la parte superior */
+    position: fixed;
     top: 0;
     width: 100%;
-    background: rgba(255, 255, 255, 0.8); /* Fondo semi-transparente para los botones */
-    z-index: 10; /* Asegura que la barra de herramientas está por encima del SVG */
+    background: rgba(255, 255, 255, 0.8);
+    z-index: 10;
     display: flex;
-    justify-content: center; /* Centra los botones horizontalmente */
-    padding: 10px 0; /* Agrega algo de relleno en la parte superior e inferior */
+    justify-content: center;
+    padding: 10px 0;
 }
 
+.toolbar-title {
+    /* Establece un tamaño para la imagen, si es necesario */
+    max-height: 50px;
+    margin-right: 20px;
+}
+
+/* Establece un margen superior para el contenido para que no esté detrás de la barra de herramientas fija */
 #viz {
+    margin-top: 70px; /* Ajusta este valor según la altura de tu barra de herramientas */
     width: 100%;
-    height: 100vh; /* Utiliza la altura de la ventana del navegador */
-    position: relative; /* Posición relativa para que se ajuste dentro del cuerpo */
+    height: calc(100vh - 70px); /* Ajusta este valor para que calcule el 100% de la altura de la pantalla menos la barra de herramientas */
+    position: relative;
     top: 0;
     left: 0;
 }
 
 button {
-    margin: 0 10px; /* Espacio entre botones */
+    margin: 0 10px;
 }
+
+/* Añade estilos para el desplazamiento si el contenido es más grande que el viewport */
+html, body {
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
