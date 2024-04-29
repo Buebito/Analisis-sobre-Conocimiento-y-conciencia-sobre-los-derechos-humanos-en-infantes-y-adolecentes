@@ -43,7 +43,7 @@ async function cargarDatos() {
         }));
 
     console.log(datosProcesados);
-    actualizarVisualizacion('todos');
+    actualizarVisualizacion('menores10');
 }
 
 // Función para convertir CSV a array de objetos
