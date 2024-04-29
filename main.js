@@ -250,3 +250,12 @@ document.getElementById('btnEntre10y15').addEventListener('click', () => actuali
 document.getElementById('btnMayores15').addEventListener('click', () => actualizarVisualizacion('mayores15'));
 document.getElementById('btnTodos').addEventListener('click', () => actualizarVisualizacion('todos'));
 
+
+// Función para alternar la visibilidad del popup
+function togglePopup() {
+    var popup = document.getElementById('infoPopup');
+    popup.style.display = popup.style.display === 'none' ? 'block' : 'none';
+}
+
+// Event listener para el botón de menú
+document.getElementById('menuButton').addEventListener('click', togglePopup);

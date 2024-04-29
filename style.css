@@ -73,5 +73,30 @@ html, body {
     background-color: #ddd; /* Cambio de fondo al pasar el ratón */
 }
 
+/* Estilos para el popup */
+.info-popup {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 600px;
+    background: white;
+    padding: 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    border-radius: 8px;
+    z-index: 100;
+    display: none; /* Oculto inicialmente */
+}
+
+/* Estilos para el texto dentro del popup */
+.info-popup p {
+    margin: 0;
+    color: #333;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+
 
 
