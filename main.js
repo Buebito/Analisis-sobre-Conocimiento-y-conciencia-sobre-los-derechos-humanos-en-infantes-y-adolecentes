@@ -60,7 +60,7 @@ function csvToArray(str, delimiter = ",") {
     return arr.filter(row => row[headers[0]]); // Filtrar filas vacías
 }
 
-function seleccionarAleatoriamente(arr, num = 15) {
+function seleccionarAleatoriamente(arr, num = 25) {
     const shuffledArray = [...arr];
     let m = shuffledArray.length, t, i;
   
