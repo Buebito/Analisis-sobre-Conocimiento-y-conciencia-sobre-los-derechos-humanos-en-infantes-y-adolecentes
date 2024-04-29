@@ -115,7 +115,7 @@ function actualizarVisualizacion(rangoEdad) {
     // Calcula el radio de las burbujas basado en el texto
     const context = document.createElement('canvas').getContext('2d');
     // Dentro de la función donde calculas el radio y las líneas
-    context.font = '16px sans-serif'; // Establece el mismo estilo de fuente que usarás en SVG
+    context.font = '16px "Comic Sans MS", cursive'; // Establece el mismo estilo de fuente que usarás en SVG
     datosAleatorios.forEach(d => {
         let words = d.respuesta.split(' ');
         let lines = [];
@@ -233,10 +233,11 @@ function actualizarVisualizacion(rangoEdad) {
                     .attr('fill', 'black')
                     .style('text-anchor', 'middle')
                     .style('alignment-baseline', 'middle')
+                    .style('font-family', '"Comic Sans MS", cursive') // Aquí se aplica la fuente
                     .style('font-size', '16px');
             });
         });
-    }
+    }    
 
     // Inicia la simulación con ticked
     simulation.on('tick', ticked);

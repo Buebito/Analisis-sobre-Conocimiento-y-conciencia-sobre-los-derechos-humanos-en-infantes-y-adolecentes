@@ -5,44 +5,73 @@ body {
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
-    /* Elimina el overflow: hidden; para permitir desplazamiento */
 }
 
 .toolbar {
     position: fixed;
     top: 0;
     width: 100%;
-    background: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.9); /* Más opacidad para mejor legibilidad */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Sombra para destacar la barra */
     z-index: 10;
     display: flex;
-    justify-content: center;
+    justify-content: space-around; /* Distribuye los elementos uniformemente */
+    align-items: center; /* Centra los elementos verticalmente */
     padding: 10px 0;
 }
 
 .toolbar-title {
-    /* Establece un tamaño para la imagen, si es necesario */
     max-height: 50px;
     margin-right: 20px;
 }
 
-/* Establece un margen superior para el contenido para que no esté detrás de la barra de herramientas fija */
 #viz {
-    margin-top: 70px; /* Ajusta este valor según la altura de tu barra de herramientas */
+    margin-top: 70px;
     width: 100%;
-    height: calc(100vh - 70px); /* Ajusta este valor para que calcule el 100% de la altura de la pantalla menos la barra de herramientas */
+    height: calc(100vh - 70px);
     position: relative;
     top: 0;
     left: 0;
 }
 
 button {
-    margin: 0 10px;
+    background-color: #4CAF50; /* Color verde */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 5px; /* Bordes redondeados */
+    transition: background 0.3s, color 0.3s; /* Transición suave */
 }
 
-/* Añade estilos para el desplazamiento si el contenido es más grande que el viewport */
+button:hover {
+    background-color: #45a049; /* Un tono más oscuro al pasar el mouse */
+}
+
 html, body {
     height: 100%;
     overflow-x: hidden;
     overflow-y: auto;
 }
+
+#menuButton {
+    font-size: 24px; /* Tamaño del icono */
+    background: none;
+    border: none;
+    color: #333; /* Color del texto/icono */
+    cursor: pointer;
+    padding: 10px 20px;
+    margin-right: 20px; /* Espacio antes del título */
+}
+
+#menuButton:hover {
+    background-color: #ddd; /* Cambio de fondo al pasar el ratón */
+}
+
+
 
