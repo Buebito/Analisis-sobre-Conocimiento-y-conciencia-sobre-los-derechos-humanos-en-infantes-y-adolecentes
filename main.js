@@ -1,3 +1,26 @@
+let estadoActual = 0; // Índice del estado inicial
+// botón >>
+const estados = [
+    {
+        titulo: 'title1.png',
+        columna: '¿Qué son para ti los Derechos Humanos?'
+    },
+    {
+        titulo: 'title2.png',
+        columna: '¿Qué significa ser una persona?'
+    }, 
+    {
+        titulo: 'title3.png',
+        columna: '¿Cuáles derechos conoces?'
+    } 
+];
+function actualizarEstado() {
+    estadoActual = (estadoActual + 1) % estados.length; // Avanzar al siguiente estado
+    document.getElementById('imgTitulo').src = estados[estadoActual].titulo; // Cambiar imagen del título
+    cargarDatos(); // Recargar y mostrar los datos según el nuevo estado
+}
+document.getElementById('btnCambio').addEventListener('click', actualizarEstado);
+// 
 const MAX_WIDTH = 300; // Máximo ancho del texto antes de hacer un salto de línea
 const LINE_HEIGHT = 20; // Altura de línea para el texto dentro de la burbuja
 const MIN_RADIUS = 150; // Radio mínimo de la burbuja
@@ -6,23 +29,20 @@ let datosProcesados;
 async function cargarDatos() {
     const response = await fetch('encuesta_dh_filtrada.csv');
     const csvText = await response.text();
-    const data = csvToArray(csvText, ',');
+    const data = csvToArray(csvText, ';');
+    
+    var columnaActual = estados[estadoActual].columna; // Usar la columna según el estado actual
 
-    // Procesa y agrega la edad convertida en número a cada objeto
-    // Filtra los datos para descartar aquellos sin respuesta o edad
     datosProcesados = data
-        .filter(d => d["¿Qué son para ti los Derechos Humanos?"] && d["¿Cuántos años cumplidos tienes? (anota el número)"])
+        .filter(d => d[columnaActual] && d["¿Cuántos años cumplidos tienes? (anota el número)"])
         .map(d => ({
-            respuesta: d["¿Qué son para ti los Derechos Humanos?"],
+            respuesta: d[columnaActual],
             edad: parseFloat(d["¿Cuántos años cumplidos tienes? (anota el número)"]),
-            // Aquí se calcula el radio basado en la longitud de la respuesta
-            radius: Math.sqrt(d["¿Qué son para ti los Derechos Humanos?"].length) * 2,
-            color: 'gray' // Color por defecto, se asignará según el botón pulsado
+            radius: Math.sqrt(d[columnaActual].length) * 2,
+            color: 'gray'
         }));
 
     console.log(datosProcesados);
-
-    // Visualizar todos los datos al inicio
     actualizarVisualizacion('todos');
 }
 
@@ -58,9 +78,17 @@ function seleccionarAleatoriamente(arr, num = 15) {
     return shuffledArray.slice(0, num);
 }
 
-function colorAleatorio() {
-    return `hsl(${Math.random() * 360}, 100%, 50%)`;
+// Función para generar un color PASTEL aleatorio
+function colorAleatorioPastel() {
+    // Hue (0-360): Cualquier tono del círculo cromático.
+    // Saturation (25-75%): Saturación baja para suavizar el color.
+    // Lightness (75-90%): Alta luminosidad para obtener un tono pastel.
+    const hue = Math.random() * 360;
+    const saturation = 25 + Math.random() * 50;
+    const lightness = 75 + Math.random() * 15;
+    return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
 }
+
 
 function actualizarVisualizacion(rangoEdad) {
     
@@ -136,11 +164,6 @@ function actualizarVisualizacion(rangoEdad) {
         .force('center', d3.forceCenter(width / 2, height / 2))
         .force('collision', d3.forceCollide().radius(d => d.radius));
 
-    // Función para generar un color aleatorio
-    function colorAleatorio() {
-        return `hsl(${Math.random() * 360}, 100%, 50%)`;
-    }
-
     // Eliminar las burbujas existentes antes de crear nuevas
     svg.selectAll('.bubble').remove();
     svg.selectAll('.texto').remove();
@@ -152,7 +175,7 @@ function actualizarVisualizacion(rangoEdad) {
         .enter().append('circle')
         .attr('class', 'bubble')
         .attr('r', d => d.radius)
-        .attr('fill', colorAleatorio)
+        .attr('fill', colorAleatorioPastel)
         .call(d3.drag()
             .on('start', dragstarted)
             .on('drag', dragged)

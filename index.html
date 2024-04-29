@@ -7,11 +7,14 @@
 </head>
 <body>
     <div id="buttons" class="toolbar">
-        <img src="title.png" alt="Título" class="toolbar-title"> <!-- Añade esta línea -->
+        <img id = "imgTitulo" src="title.png" alt="Título" class="toolbar-title">
+        <!-- Botones para filtrar por grupo de edad -->
         <button id="btnMenores10">Menores de 10</button>
         <button id="btnEntre10y15">Entre 10 y 15</button>
         <button id="btnMayores15">Mayores de 15</button>
         <button id="btnTodos">Todos</button>
+        <!-- Botón para cambiar entre las visualizaciones de datos y títulos -->
+        <button id="btnCambio">>></button>
     </div>    
     <div id="viz"></div>
     <script src="https://d3js.org/d3.v7.min.js"></script>

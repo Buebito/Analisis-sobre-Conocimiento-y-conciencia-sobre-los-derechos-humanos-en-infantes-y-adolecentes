@@ -19,3 +19,4 @@ El corazón técnico de nuestra solución se compone de HTML, CSS y JavaScript, 
 
 ## Impacto Esperado:
 Creemos firmemente que esta herramienta no solo educará a la población sobre la situación de los derechos de la infancia y la adolescencia en México, sino que también empoderará a los ciudadanos para actuar en defensa de estos derechos. Al presentar las voces de los jóvenes de una manera visualmente atractiva y accesible, esperamos fomentar un diálogo constructivo que conduzca a cambios significativos en la política y la sociedad en general.
+
