@@ -60,7 +60,7 @@ function csvToArray(str, delimiter = ",") {
     return arr.filter(row => row[headers[0]]); // Filtrar filas vacías
 }
 
-function seleccionarAleatoriamente(arr, num = 25) {
+function seleccionarAleatoriamente(arr, num = 30) {
     const shuffledArray = [...arr];
     let m = shuffledArray.length, t, i;
   
@@ -160,7 +160,7 @@ function actualizarVisualizacion(rangoEdad) {
 
     // Crear la simulación de fuerzas para las burbujas con datosAleatorios
     const simulation = d3.forceSimulation(datosAleatorios)
-        .force('charge', d3.forceManyBody().strength(10))
+        .force('charge', d3.forceManyBody().strength(20))
         .force('center', d3.forceCenter(width / 2, height / 2))
         .force('collision', d3.forceCollide().radius(d => d.radius));
 
